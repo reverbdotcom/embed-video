@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/alanshaw/embed-video.git"
+    "url": "git://github.com/reverbdotcom/embed-video"
   },
   "keywords": [
     "video",
@@ -22,9 +22,9 @@
   "author": "Alan Shaw",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alanshaw/embed-video/issues"
+    "url": "https://github.com/reverbdotcom/embed-video/issues"
   },
-  "homepage": "https://github.com/alanshaw/embed-video",
+  "homepage": "https://github.com/reverbdotcom/embed-video",
   "devDependencies": {
     "tape": "^4.0.0"
   },
@@ -42,6 +42,5 @@
     ]
   },
   "dependencies": {
-    "request": "^2.75.0"
   }
 }

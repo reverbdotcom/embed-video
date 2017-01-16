@@ -1,5 +1,4 @@
 var URL = require('url')
-var request = require('request')
 
 var validVimeoOpts = ['thumbnail_small', 'thumbnail_medium', 'thumbnail_large']
 var validYouTubeOpts = ['default', 'mqdefault', 'hqdefault', 'sddefault', 'maxresdefault']
@@ -23,9 +22,6 @@ embed.image = function (url, opts, cb) {
 
   id = detectYoutube(url)
   if (id) return embed.youtube.image(id, opts, cb)
-
-  id = detectVimeo(url)
-  if (id) return embed.vimeo.image(id, opts, cb)
 }
 
 function detectVimeo (url) {
@@ -81,37 +77,6 @@ embed.youtube.image = function (id, opts, cb) {
   if (!cb) return result.html
 
   setTimeout(function () { cb(null, result) }, 1)
-}
-
-embed.vimeo.image = function (id, opts, cb) {
-  if (typeof opts === 'function') {
-    cb = opts
-    opts = {}
-  }
-
-  if (!cb) throw new Error('must pass embed.vimeo.image a callback')
-
-  opts = opts || {}
-
-  opts.image = validVimeoOpts.indexOf(opts.image) >= 0 ? opts.image : 'thumbnail_large'
-
-  request.get({
-    url: 'http://vimeo.com/api/v2/video/' + id + '.json',
-    json: true
-  }, function (err, res, body) {
-    if (err) return cb(err)
-    if (res.statusCode !== 200) return cb(new Error('unexpected response from vimeo'))
-    if (!body || !body[0] || !body[0][opts.image]) return cb(new Error('no image found for vimeo.com/' + id))
-
-    var src = body[0][opts.image].split(':')[1]
-
-    var result = {
-      src: src,
-      html: '<img src="' + src + '"/>'
-    }
-
-    cb(null, result)
-  })
 }
 
 function serializeQuery (query) {
