@@ -40,22 +40,43 @@ function detectYoutube (url) {
   return null
 }
 
-embed.vimeo = function (id, opts) {
-  // TODO: use opts to set iframe attrs.
+function generateYoutubeEmbedUrl(id, opts) {
   var queryString = ''
   if (opts && opts.hasOwnProperty('query')){
     queryString = "?" + serializeQuery(opts.query)
   }
-  return '<iframe src="//player.vimeo.com/video/' + id + queryString + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+
+  return "//www.youtube.com/embed/" + id + queryString;
+}
+
+function generateVimeoEmbedUrl(id, opts) {
+  var queryString = ''
+  if (opts && opts.hasOwnProperty('query')){
+    queryString = "?" + serializeQuery(opts.query)
+  }
+  return "//player.vimeo.com/video/" + id + queryString;
+}
+
+embed.embedUrl = function(url, opts) {
+  var id
+
+  url = URL.parse(url, true)
+
+  id = detectYoutube(url)
+  if (id) return generateYoutubeEmbedUrl(id, opts)
+
+  id = detectVimeo(url)
+  if (id) return generateVimeoEmbedUrl(id, opts)
+}
+
+embed.vimeo = function (id, opts) {
+  // TODO: use opts to set iframe attrs.
+  return '<iframe src="' + generateVimeoEmbedUrl(id, opts) + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
 }
 
 embed.youtube = function (id, opts) {
   // TODO: use opts to set iframe attrs.
-  var queryString = ''
-  if (opts && opts.hasOwnProperty('query')){
-    queryString = "?" + serializeQuery(opts.query)
-  }
-  return '<iframe src="//www.youtube.com/embed/' + id + queryString + '" frameborder="0" allowfullscreen></iframe>'
+  return '<iframe src="' + generateYoutubeEmbedUrl(id, opts) + '" frameborder="0" allowfullscreen></iframe>'
 }
 
 embed.youtube.image = function (id, opts, cb) {
